@@ -1,32 +1,45 @@
-import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './LoginForm.css';
 
-const LoginForm = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
+const LoginForm = ({ updateUserDetails }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Hook for navigation
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/login', formData);
-      setMessage(res.data.message);
-      localStorage.setItem('token', res.data.token); // Store token if using JWT
-    } catch (error) {
-      setMessage(error.response?.data?.error || 'Login failed');
+
+    // Dummy login check
+    if (username === 'admin' && password === '1234') {
+      updateUserDetails({ username, name: 'Admin User' });
+      navigate('/'); // Redirect to Home page after login
+    } else {
+      alert('Invalid credentials! Try username: admin and password: admin');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" placeholder="Password" type="password" onChange={handleChange} />
-      <button type="submit">Log In</button>
-      <p>{message}</p>
-    </form>
+    <div className="login-form">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const HomePage = () => {
+const HomePage = ({ userDetails }) => {
   return (
     <div>
-      <h1>HomePage</h1>
+      <h1>Welcome {userDetails ? userDetails.name : 'Guest'}!</h1>
+      <p>{userDetails ? 'You are now logged in.' : 'Please login to continue.'}</p>
     </div>
   );
 };
